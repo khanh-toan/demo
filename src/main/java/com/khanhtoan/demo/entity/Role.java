@@ -21,6 +21,9 @@ public class Role {
 
     private String name;
 
-    @OneToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "roles",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH})
     private List<User> userList;
 }
