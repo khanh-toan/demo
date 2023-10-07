@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
-//test thu commit
+//test thu commit 1
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
