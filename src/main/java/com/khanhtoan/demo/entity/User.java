@@ -22,6 +22,9 @@ public class User {
 
     private String password;
 
+    @OneToOne(mappedBy = "user")
+    private Teacher teacher;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role roles;
