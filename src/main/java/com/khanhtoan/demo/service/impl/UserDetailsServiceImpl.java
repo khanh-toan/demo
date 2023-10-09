@@ -1,6 +1,7 @@
 package com.khanhtoan.demo.service.impl;
 
 import com.khanhtoan.demo.entity.User;
+import com.khanhtoan.demo.impl.UserDetailsImpl;
 import com.khanhtoan.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,18 +19,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username);
+        if (user == null)
             throw new UsernameNotFoundException("User not found");
-        }
-        List<GrantedAuthority> authorities = user.getRoles().getUserList().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
-
+        return new UserDetailsImpl(user);
     }
 }
 

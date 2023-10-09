@@ -1,5 +1,7 @@
 package com.khanhtoan.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,6 +16,9 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "class")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Class {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +32,7 @@ public class Class {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "student_class",
             joinColumns = @JoinColumn(name = "class_id"),

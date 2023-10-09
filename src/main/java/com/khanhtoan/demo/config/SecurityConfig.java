@@ -1,47 +1,54 @@
 package com.khanhtoan.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.sql.DataSource;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
-    /*private final UserDetailsService userDetailsService;
+public class SecurityConfig {
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public AuthenticationProvider authProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        return provider;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }*/
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize ->
-                authorize
-                        .requestMatchers("/teacher/**").hasRole("TEACHER")
-                        .requestMatchers("/student/**").hasRole("STUDENT")
-                        .anyRequest().authenticated())
-                .formLogin(form ->
-                        form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/authenticateTheUser")
-                                .defaultSuccessUrl("/")
-                                .permitAll()
-                )
-                .logout(logout -> logout.permitAll()
-                )
-                .exceptionHandling(configurer ->
-                        configurer.accessDeniedPage("/access-denied")
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> {
+                    auth
+                            .requestMatchers(antMatcher("/admin/**")).hasRole("ADMIN")
+                            .requestMatchers(antMatcher("/student/**")).hasAnyRole("STUDENT", "ADMIN")
+                            .requestMatchers(antMatcher("/teacher/**")).hasAnyRole("TEACHER", "ADMIN")
+                            .anyRequest().permitAll();
+                })
+                .httpBasic(
+                        httpBasic -> httpBasic.authenticationEntryPoint(authenticationEntryPoint)
                 );
         return http.build();
     }

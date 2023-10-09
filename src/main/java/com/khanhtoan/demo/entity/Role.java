@@ -1,19 +1,23 @@
 package com.khanhtoan.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
-@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "role")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +25,7 @@ public class Role {
 
     private String name;
 
-    @OneToMany(mappedBy = "roles",
-            fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<User> userList;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> userlist = new HashSet<>();
+
 }
