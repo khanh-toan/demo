@@ -3,6 +3,8 @@ package com.khanhtoan.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,30 +12,32 @@ import lombok.*;
 @Setter
 @ToString
 @Entity
-@Table(name = "session")
+@Table(name = "sessionss")
 public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sesid;
+    private int sesId;
 
-    private int date;
-    private int index;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date_time;
+
+    private int theIndex;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "gid")
+    @JoinColumn(name = "groupId")
     private Group group;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "rid")
+    @JoinColumn(name = "roomId")
     private Room room;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "tid")
+    @JoinColumn(name = "timeId")
     private TimeSlot timeSlot;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    private boolean attanded;
+    private boolean attandence;
 }

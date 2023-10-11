@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
-@Table(name = "group")
+@Table(name = "groupss")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
