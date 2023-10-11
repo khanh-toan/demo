@@ -11,33 +11,17 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-@Table(name = "user")
-public class User {
+@Table(name = "room")
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
 
-    @Column(unique = true)
-    private String email;
-
-    private String password;
-
-    @OneToOne(mappedBy = "user")
-    private Teacher teacher;
-
-    @OneToOne(mappedBy = "user")
-    private Student student;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role roles;
-
-    @OneToMany(mappedBy = "roles",
+    @OneToMany(mappedBy = "room",
             fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<User> userList;
-
+    private List<Session> sessionList;
 }

@@ -5,25 +5,23 @@ import lombok.*;
 
 import java.util.List;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "subject")
-public class Subject {
+@Table(name = "time_slot")
+public class TimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "subject_name")
-    private String subjectName;
+    private String description;
 
-    @OneToMany(mappedBy = "subject",
+    @OneToMany(mappedBy = "timeSlot",
             fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Group> groupList;
+    private List<Session> sessionList;
 }

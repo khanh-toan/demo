@@ -16,20 +16,21 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String name;
+
+    @OneToMany(mappedBy = "teacher",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Session> sessionList;
+
+    @OneToMany(mappedBy = "teacher",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Group> groupList;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToMany(mappedBy = "teacher",
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Class> classList;
-
-    @OneToMany(mappedBy = "teacher",
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Subject> subjectList;
-
 }

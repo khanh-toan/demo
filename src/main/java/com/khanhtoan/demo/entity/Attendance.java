@@ -15,22 +15,18 @@ import java.util.Date;
 @Table(name = "attendance")
 public class Attendance {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @ManyToOne
+    @JoinColumn(name = "sessionid")
+    private Session session;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date time;
-
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
+    @Id
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "class_id")
-    private Class classes;
+    private boolean present;
+    private String description;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date record_time;
 }

@@ -21,16 +21,17 @@ public class Student {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-            @JoinTable(
-            name = "student_class",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "class_id")
-    )
-    private List<Class> classList;
-
     @OneToMany(mappedBy = "student",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private List<Attendance> attendanceList;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Student_Group",
+            joinColumns = @JoinColumn(name = "studentId"),
+            inverseJoinColumns = @JoinColumn(name = "groupId")
+    )
+    private List<Group> groupList;
 }
